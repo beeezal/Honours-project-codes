@@ -8,9 +8,7 @@ function setup() {
 
 function draw() {
   w.display();
-
-  /* Remove below comment slashes, if we need to also vary step size by a custom distribution */
-  //let vel_mag =(frameCount%180==0)?genRandomNum()*50:1;
+  let vel_mag = genExp();
   w.move(vel_mag); 
 }
 
@@ -60,12 +58,7 @@ function windowResized(){
   background(200);
 }
 
-function genRandomNum(){
+function genExp(){
   let x = random();
-  let y = random();
-  while (y>x**2){
-    x = y;
-    y = random();
-  }
-  return x;
+  return -log(1-x);
 }
