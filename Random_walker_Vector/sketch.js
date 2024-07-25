@@ -8,7 +8,9 @@ function setup() {
 
 function draw() {
   w.display();
-  let vel_mag = genExp();
+  /* Controling the magnitude of the step according to exponential distribution
+  But multiplying by 3 to see effects clearer - generated random variable - Exp(3) */
+  let vel_mag = genExp()*3;
   w.move(vel_mag); 
 }
 
@@ -17,12 +19,14 @@ class Walker{
     this.location = createVector(x, y);
     this.v = p5.Vector.random2D();
     this.r = r;
+    stroke(0);
+    fill(100);
   }
   
   display() {
-    stroke(0);
-    fill(100);
-    strokeWeight(this.r/1.5);
+    /*Making the line drawn if walker jumps much less thicker if larger and
+    making sure it doesn't become too small if radius of walker is small*/
+    strokeWeight(max(this.r/4,0.5));
     line(this.location.x - this.v.x, this.location.y - this.v.y,this.location.x, this.location.y);
     strokeWeight(1);
     circle(this.location.x, this.location.y, this.r);
@@ -60,5 +64,6 @@ function windowResized(){
 
 function genExp(){
   let x = random();
-  return -log(1-x);
+  exp_rand= -log(x);
+  return exp_rand;
 }
