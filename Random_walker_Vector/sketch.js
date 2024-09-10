@@ -21,11 +21,12 @@ class Walker{
     this.location = createVector(x, y);
     this.v = p5.Vector.random2D();
     this.r = r;
+    this.sa = random(0,TWO_PI);
   }
   
   display() {
     stroke(0);
-    fill('teal');
+    fill(100);
     strokeWeight(this.r/1.5);
     line(this.location.x - this.v.x, this.location.y - this.v.y,this.location.x, this.location.y);
     strokeWeight(1);
@@ -34,9 +35,11 @@ class Walker{
 	
   
   move(vel_mag=1,chk_edges=false) {
-    //this.sa = random(0,TWO_PI);
+    if (frameCount%3==0){
+      this.sa = random(0,TWO_PI);
+    }
     //Uncomment below if doing a random walk with noise 
-    this.sa = noise(this.t)*TWO_PI;
+    //this.sa = noise(this.t)*TWO_PI;
     this.v.set(cos(this.sa), sin(this.sa));
     this.v.mult(vel_mag);
     this.location.add(this.v);

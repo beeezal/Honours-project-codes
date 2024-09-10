@@ -49,10 +49,10 @@ let w;
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(255);
-  w = new Walker(width/2, height/2, 10);   //Creating an object w of the class Walker
+  w = new Walker(width/2, height/2, 20);   //Creating an object w of the class Walker
 }
 
 function draw() {
   w.display();                             //Be aware of which function you call first according to the step type you chose
-  w.step('step');
+  w.step('direction');
 }
