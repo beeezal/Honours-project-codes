@@ -16,7 +16,7 @@ class Walker {
   }
 
   step() {
-    //Changes the location of the point randomly within a unit square
+    //Changes the location of the point randomly within a unit square of the current location
     this.x += random(-1, 1);
     this.y += random(-1, 1);
   }
@@ -33,10 +33,10 @@ function setup() {
   background(255);
 }
 
-/*The draw() function is called repeatedly. It is used to animate the objects in the canvas,
+/*The draw() function is called repeatedly in a infinte loop. It is used to animate the objects in the canvas,
 by repeatedly changing the variables of the objects presented on the screen*/
 function draw() {
-//*Calling the functions of the object w - show() and step() 
+//*Calling the functions of the walker object 'w' - show() and step() 
   w.show();
   w.step();
 }
