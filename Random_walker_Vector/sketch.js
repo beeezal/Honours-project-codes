@@ -1,5 +1,5 @@
 /*Creating a RW - Random Walker class with vectors.
-p5.Vector implements vectors in p5*/
+p5 implements vectors throught the p5.Vector class*/
 
 class Walker{
    /* t - time, in units of frameCount. Used as input of noise(). 100 was chosen arbitrarily as starting point in time
@@ -10,7 +10,8 @@ class Walker{
   constructor(x, y, r) {
     //Instance made with parameters position (x,y) and radius - r
     this.location = createVector(x, y);         //createVector() instantiates a vector object
-    this.velocity = p5.Vector.random2D();              
+    this.velocity = p5.Vector.random2D();  
+    this.r = r;                                 //r - diameter of the walker
     this.sa = random(0,TWO_PI);                 //sa - step angle
   }
   
@@ -82,6 +83,8 @@ let w;
 function setup() {
     createCanvas(windowWidth,windowHeight);
     background(200);
+
+    //Creating an instance w of Walker and we will default to centre of the screen with size 20 as  standard practice
     w = new Walker(width / 2, height / 2, 20);
 }
 
@@ -90,5 +93,5 @@ function draw() {
   /* Remove below comment slashes, if we need to also vary step size by a custom distribution */
   //let vel_mag =(frameCount%180==0)?RandomSquared()*50:1;
   //w.move(vel_mag);
-  w.move(3,true); 
+  w.move(3,true);       // vel_mag = 3 is just an arbitrary standard picked after experimentation
 }
