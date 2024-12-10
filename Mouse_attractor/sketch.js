@@ -25,7 +25,7 @@ class SMover{
     chk_edges - whether we should wrap around the edges or not (booleen) */
 
     /* If arriving behaviour is true, then the accelartion of the particle will be according to a steering force 
-    calculated by the seek() function or else we simply accelerate towards the mouse with mag = 0.5*/
+    calculated by the seek() function or else we simply accelerate towards the mouse with mag = 0.5v */
     if (arriving_bhv){ 
       this.seek(target);           //Check seek() function for a more detailed explanation
       this.vel.add(this.acc);
@@ -49,7 +49,7 @@ class SMover{
   display(mouth_size = PI/10){
     /* We first save the current state of the canvas using push() and then
     translate our origin to the current position of our particle and 
-    rotate the 'head' of the particle according to the direction of velocity and finally drawing the particle*/
+    rotate the 'head' of the particle according to the direction of velocity and finally drawing the particle */
 
     push();
     translate(this.pos.x, this.pos.y);
@@ -76,7 +76,7 @@ class SMover{
     
     let m = this.desired_vel.mag();
 
-    //Then depending on the distance of the particle from target, we set the magnitude of the desired velocity
+    //Then depending on the distance of the particle from target, we set the magnitude of the desired velocity as maxSpeed
     //if within 100 pixels of the target, then magnitude ∝ distance (pricisely, the linear scaling [0,100] -> [0, maxSpeed])
     if (m < 100){ 
       this.desired_vel.setMag(map(m,0,100,0,5));
