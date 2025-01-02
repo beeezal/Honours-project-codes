@@ -1,26 +1,15 @@
-//Changes to be made:
-/* 
-1. Separate the calaculation of desired velocity and steering force into two different functions
-2. Hence make the seek() function a particular behaviour of the mover (Create a seeker class)
-3. Add arriving behaviour to the seeker class.
-*/
-
 class AutonMover {
     constructor(x, y, r) {
         this.r = r;
         this.D = r * 2;                  //Diameter of the particle - used in defining shapes 
+        
         this.pos = createVector(x, y);
         this.vel = p5.Vector.random2D();
         this.acc = createVector(0, 0);
         this.desired_vel = createVector();
-    }
 
-    update(target, chk_edges = false) {
-        this.seek(target);
-        this.vel.add(this.acc);
-        this.pos.add(this.vel);
-        this.acc.mult(0);
-        if (chk_edges) { this.checkEdges(); }
+        this.maxSpeed = 5;
+        this.maxForce = 0.125;
     }
 
     applyForce(force) {
@@ -46,17 +35,11 @@ class AutonMover {
         }
     }
 
-    seek(target) {
-        // Calculate the desired velocity
-        this.desired_vel = p5.Vector.sub(target, this.pos);
-        this.desired_vel.setMag(this.maxSpeed || 5); // Set the magnitude of the desired velocity to maxSpeed
-
-        // Calculate the steering force
+    steer(){
         let steer = p5.Vector.sub(this.desired_vel, this.vel);
-        steer.limit(this.maxForce || 0.125);         // Limit the steering force to maxForce or 0.125 
+        steer.limit(this.maxForce);         
 
         this.applyForce(steer);
-
     }
 
     checkEdges() {
@@ -71,5 +54,31 @@ class AutonMover {
         } else if (this.pos.y < -this.r) {
             this.pos.y = height + (this.pos.y + this.r);
         }
+    }
+}
+
+class Seeker extends AutonMover{
+    seek(target, arrive = false){
+        // Calculate the desired velocity
+        this.desired_vel = p5.Vector.sub(target, this.pos);
+        let distance = this.desired_vel.mag();
+        
+        //CHECK IF THIS WORKS
+        if (arrive && distance < 100){
+                let desiredMag = map(distance, 0, 100, 0, this.maxSpeed);
+                this.desired_vel.setMag(desiredMag);
+                                
+        }
+        else{this.desired_vel.setMag(this.maxSpeed)};
+
+        this.steer();
+    }
+
+    update(target, arrive = false, chk_edges = false) {
+        this.seek(target, arrive);
+        this.vel.add(this.acc);
+        this.pos.add(this.vel);
+        this.acc.mult(0);
+        if (chk_edges) { this.checkEdges(); }
     }
 }

@@ -1,7 +1,7 @@
 
 let wanderer;
 
-class Wanderer extends AutonMover{
+class Wanderer extends Seeker{
   constructor(x,y,r){
     super(x,y,r);
 
@@ -69,7 +69,7 @@ function draw() {
 
   wanderer.display(/*distingDirection*/ /*mouthSize*/);
   wanderer.calculateWanderTarget();
-  wanderer.update(/*target*/ wanderer.target,/*chk_edges*/ true);
+  wanderer.update(/*target*/ wanderer.target,/*arrive*/ false,/*chk_edges*/ true);
 }
 
 function keyPressed(){
