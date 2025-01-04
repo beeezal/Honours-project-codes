@@ -1,5 +1,6 @@
 
 let wanderer;
+let randomRadius = true;
 
 class Wanderer extends Seeker{
   constructor(x,y,r){
@@ -30,7 +31,7 @@ class Wanderer extends Seeker{
   */
 
   calculateWanderTarget(){              //To calculate the predicted location and target
-    this.predictedPos.set(p5.Vector.setMag(this.vel || p5.Vector.random2D(), this.predictionInterval));
+    this.predictedPos.set(p5.Vector.setMag(this.vel, this.predictionInterval));
     this.predictedPos.add(this.pos);
 
     this.targetAngle += random(-0.3,0.3);
@@ -40,8 +41,10 @@ class Wanderer extends Seeker{
 
   displayCircle(){
     noFill();
+    //drawingContext.setLineDash([5,5]);
     line(this.pos.x,this.pos.y,this.predictedPos.x,this.predictedPos.y);
-    circle(this.predictedPos.x,this.predictedPos.y, 40*2);
+    //drawingContext.setLineDash([]);
+    circle(this.predictedPos.x,this.predictedPos.y, this.wanderRadius*2);
     line(this.predictedPos.x,this.predictedPos.y,this.#target.x,this.#target.y);
     circle(this.#target.x,this.#target.y,5);
   }
@@ -68,6 +71,8 @@ function draw() {
   fill(100);
 
   wanderer.display(/*distingDirection*/ /*mouthSize*/);
+  wanderer.wanderRadius = randomRadius ? constrain(wanderer.wanderRadius+=random(-2,2), 5, wanderer.predictionInterval-wanderer.r) 
+                                      : wanderer.wanderRadius;
   wanderer.calculateWanderTarget();
   wanderer.update(/*target*/ wanderer.target,/*arrive*/ false,/*chk_edges*/ true);
 }
@@ -76,5 +81,8 @@ function keyPressed(){
   if (keyCode === 32){
     wanderer.displayWanderCircle = !wanderer.displayWanderCircle;
   }  
+  if(key === 'r'){
+    randomRadius = !randomRadius;
+  }
   return false;
 }
