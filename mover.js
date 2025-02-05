@@ -10,10 +10,20 @@ class AutonMover {
 
         this.maxSpeed = 5;
         this.maxForce = 0.125;
+
+        this.posHistory = [];
+        this.showHistory = true;
     }
 
     applyForce(force) {
         this.acc.add(force);
+    }
+
+    updateHistory(){
+        this.posHistory.push(this.pos.copy());
+        if (this.posHistory.length > 500) { 
+            this.posHistory.shift();
+        }
     }
 
     display(dinstingDirection = false, mouthSize = PI / 10) {
@@ -75,10 +85,29 @@ class Seeker extends AutonMover{
     }
 
     update(target, arrive = false, chk_edges = false) {
+        this.updateHistory();
+
         this.seek(target, arrive);
         this.vel.add(this.acc);
         this.pos.add(this.vel);
         this.acc.mult(0);
+
         if (chk_edges) { this.checkEdges(); }
+    }
+
+    display(dinstingDirection = false, mouthSize = PI / 10) {
+        if (this.showHistory) {
+            for (let i = 0; i < this.posHistory.length-1; i++) {
+                let prevPos = this.posHistory[i];
+                let currPos = this.posHistory[i + 1];
+
+                let posChange = p5.Vector.dist(prevPos, currPos);
+                if (posChange >= windowWidth || posChange >= windowHeight) {
+                    continue;
+                }
+                line(prevPos.x, prevPos.y, currPos.x, currPos.y);
+            }
+        }
+        super.display(dinstingDirection, mouthSize);
     }
 }
