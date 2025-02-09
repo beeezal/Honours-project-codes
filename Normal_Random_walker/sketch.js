@@ -3,7 +3,7 @@ let w;
 class WalkerNormal {
   constructor(x, y, r) {
     //Instance made with parameters position (x,y) and radius - r
-    this.pos = createVector(x, y);         //createVector() instantiates a vector object
+    this.pos = createVector(x, y);              //createVector() instantiates a vector object
     this.vel = p5.Vector.random2D();  
 
     this.r = r;                                 //r - radius of the walker
@@ -31,13 +31,13 @@ class WalkerNormal {
     }
 
     // Displaying the step of the walker using a relatively thin line
-    fill(this.col);
     if(drawConnectingLines){
       strokeWeight(this.r/1.5);
       line(this.pos.x - this.vel.x, this.pos.y - this.vel.y,this.pos.x, this.pos.y);
       strokeWeight(1);
     }
     // Displaying the walker as a circle of radius r
+    fill(this.col);
     circle(this.pos.x, this.pos.y, this.r*2);
   }
   
@@ -63,8 +63,9 @@ class WalkerNormal {
 			// the directionAngle distributed according to N(current direction,π/8) or N(μ,σ)
 			
       this.directionAngle = randomGaussian() * sigma + mu;        //σ and μ were picked experimentally
-			
-        // Changing color if change in direction is more than 2 SDs
+			//this.drectionAngle = randomGaussian(mu, sigma);		
+      
+      // Changing color if change in direction is more than 2 SDs
       if (abs(this.directionAngle - mu) >= 2*sigma && (changeColor)) {
       this.col = color(random(255), random(255), random(255));        // color is set by choosing random RGB values
       }
