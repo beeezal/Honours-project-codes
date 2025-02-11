@@ -22,6 +22,7 @@ class WalkerNormal {
           let prevPos = this.posHistory[i];
           let currPos = this.posHistory[i + 1];
 
+          // Check if the Mover has jumped edges, and continue the loop and don't draw the line
           let posChange = p5.Vector.dist(prevPos, currPos);
           if (posChange >= windowWidth || posChange >= windowHeight) {
               continue;
@@ -78,6 +79,7 @@ class WalkerNormal {
         this.posHistory.shift();
     }
   }
+  
   checkEdges() {
 		//Function to check if the walker has crossed the canvas edges, if so - wrap around
     if (this.pos.x > width + this.r) {
