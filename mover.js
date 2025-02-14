@@ -8,7 +8,7 @@ class AutonMover {
         this.acc = createVector(0, 0);
         this.desired_vel = createVector();
 
-        this.maxSpeed = 5;
+        this.maxSpeed = 3;
         this.maxForce = 0.125;
 
         this.posHistory = [];

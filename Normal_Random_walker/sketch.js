@@ -42,7 +42,7 @@ class WalkerNormal {
     circle(this.pos.x, this.pos.y, this.r*2);
   }
   
-  step(vel_mag=1,chk_edges=false) {
+  step(vel_mag=3,chk_edges=false) {
     this.updateHistory();
 
     this.setAngle();
@@ -53,7 +53,7 @@ class WalkerNormal {
 		if (chk_edges){this.checkEdges();}
   }
   
-  setAngle(sigma = PI/8, mu = this.vel.heading(), changeRate = 3, changeColor = true){ 
+  setAngle(sigma = PI/8, mu = this.vel.heading(), changeRate = 1, changeColor = true){ 
     // Function to set the direction angle of the walker's velocity
     // changeRate - rate at which we change the angle in terms of frames
     // changeColor - Whether walker's color changes when the direction changes significantly (>2 SDs)
