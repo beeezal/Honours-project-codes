@@ -1,7 +1,15 @@
+//Pseudocode for the class.
+/* 
+1. Inherent all the functions from parent class Mover  - maybe learn how to in different ways.
+2.  Includes update(), display(), applyForce(), chkEdges() and seek()
+3. Modify update() or create new function that provides the wandering behaviour
+4. a) Ask user for radius of the circle centered at predicted location and change in angle 
+    b) Calculate the center of the circle by adding the current velocity vector to the position vector
+    c) Initialize a random vector (for direction from the center) and change it every frame by given angle.
 
-let wanderer;
-let randomRadius = true;
-
+5. Now finally seek the point on the circle. 
+6. Remaining follow the same procedure as in general Automonous Agent.
+*/
 class Wanderer extends Seeker{
   constructor(x,y,r){
     super(x,y,r);
@@ -16,19 +24,6 @@ class Wanderer extends Seeker{
 
   //Pseudo-target - target is generated within the class - make this private
   #target = p5.Vector.fromAngle(this.targetAngle); 
-
-  //Pseudocode for the class.
-  /* 
-  1. Inherent all the functions from parent class Mover  - maybe learn how to in different ways.
-  2.  Includes update(), display(), applyForce(), chkEdges() and seek()
-  3. Modify update() or create new function that provides the wandering behaviour
-  4. a) Ask user for radius of the circle centered at predicted location and change in angle 
-     b) Calculate the center of the circle by adding the current velocity vector to the position vector
-     c) Initialize a random vector (for direction from the center) and change it every frame by given angle.
-
-  5. Now finally seek the point on the circle. 
-  6. Remaining follow the same procedure as in general Automonous Agent.
-  */
 
   calculateWanderTarget(){              //To calculate the predicted location and target
     this.predictedPos.set(p5.Vector.setMag(this.vel, this.predictionInterval));
@@ -60,6 +55,9 @@ class Wanderer extends Seeker{
     return this.#target;
   }
 }
+
+let wanderer;
+let randomRadius = true;
 
 function setup() {
   createCanvas(windowWidth,windowHeight);

@@ -19,7 +19,7 @@ class AutonMover {
         this.acc.add(force);
     }
 
-    updateHistory(){
+    updatePosHistory(){
         this.posHistory.push(this.pos.copy());
         if (this.posHistory.length > 500) { 
             this.posHistory.shift();
@@ -85,7 +85,7 @@ class Seeker extends AutonMover{
     }
 
     update(target, arrive = false, chk_edges = false) {
-        this.updateHistory();
+        this.updatePosHistory();
 
         this.seek(target, arrive);
         this.vel.add(this.acc);

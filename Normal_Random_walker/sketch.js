@@ -1,8 +1,5 @@
-let w;
-
 class WalkerNormal {
   constructor(x, y, r) {
-    //Instance made with parameters position (x,y) and radius - r
     this.pos = createVector(x, y);              //createVector() instantiates a vector object
     this.vel = p5.Vector.random2D();  
 
@@ -43,7 +40,7 @@ class WalkerNormal {
   }
   
   step(vel_mag=3,chk_edges=false) {
-    this.updateHistory();
+    this.updatePosHistory();
 
     this.setAngle();
     this.vel.setHeading(this.directionAngle);        // v.setHeading(direction) is same as v = v.mag() * (cos(directionAngle), sin(directionAngle))                                       
@@ -73,7 +70,7 @@ class WalkerNormal {
     }
   }
 
-  updateHistory(){
+  updatePosHistory(){
     this.posHistory.push(this.pos.copy());
     if (this.posHistory.length > 500) { 
         this.posHistory.shift();
@@ -101,16 +98,18 @@ function windowResized(){
   background(200);
 }
 
+let normalWalker;
+
 function setup() {
   createCanvas(windowWidth,windowHeight);
   background(200);
 	
 	//Initialising in the centre of the screen with size 20 is standard. Can be played around with.
-  w = new WalkerNormal(width / 2, height / 2, 10);
+  normalWalker = new WalkerNormal(width / 2, height / 2, 10);
 }
 
 function draw() {
   background(200);
-  w.display();
-  w.step(/*vel_mag*/ 3,/*chk_edges*/ true);     // vel_mag = 3 is just an arbitrary standard picked after experimentation
+  normalWalker.display();
+  normalWalker.step(/*vel_mag*/ 3,/*chk_edges*/ true);     // vel_mag = 3 is just an arbitrary standard picked after experimentation
 }

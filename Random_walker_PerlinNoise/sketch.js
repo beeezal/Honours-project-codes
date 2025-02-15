@@ -120,15 +120,15 @@ class PerlinWalker {
 
 }
 
-let w;
+let noiseWalker;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  w = new PerlinWalker(width/2, height/2, 10)  
+  noiseWalker = new PerlinWalker(width/2, height/2, 10)  
 }
 
 function draw() {
   background(255);
-  w.display();
-  w.step(/*noisyStepSize*/ true, /*vel_mag*/ 3, /*relativeMaxStepSize*/ 0.25);
+  noiseWalker.display();
+  noiseWalker.step(/*noisyStepSize*/ true, /*vel_mag*/ 3, /*relativeMaxStepSize*/ 0.25);
 }
