@@ -14,8 +14,8 @@ class Wanderer extends Seeker{
   constructor(x,y,r){
     super(x,y,r);
 
-    this.wanderRadius = 40;
-    this.predictionInterval = 100;
+    this.wanderRadius = this.r*2;
+    this.predictionInterval = this.r*5;
 
     this.predictedPos = createVector(0,0); 
     this.targetAngle=radians(random(0,360));
@@ -57,11 +57,11 @@ class Wanderer extends Seeker{
 }
 
 let wanderer;
-let randomRadius = true;
+let randomRadius = false;
 
 function setup() {
   createCanvas(windowWidth,windowHeight);
-  wanderer = new Wanderer(width/2,height/2,20);
+  wanderer = new Wanderer(width/2,height/2,10);
 }
 
 function draw() {

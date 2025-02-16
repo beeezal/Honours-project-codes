@@ -19,9 +19,9 @@ class AutonMover {
         this.acc.add(force);
     }
 
-    updatePosHistory(){
+    updatePosHistory(maxArrayLength = 1000) {
         this.posHistory.push(this.pos.copy());
-        if (this.posHistory.length > 500) { 
+        if (this.posHistory.length > maxArrayLength) { 
             this.posHistory.shift();
         }
     }

@@ -62,7 +62,7 @@ class PerlinWalker {
    * @param {number} [relativeMaxStepSize=0.75] - The maximum step size relative to the radius, when noisyStepSize is true.
  */
   step(noisyStepSize = false, vel_mag = 3, chk_edges=true, relativeMaxStepSize = 0.75) {
-    this.updatePosHistory();
+    this.updatePosHistory(1000);
 
     if(noisyStepSize){
     // Changing step size according to perlin noise, where magOffset is the input for noise() and
@@ -94,11 +94,11 @@ class PerlinWalker {
                 map(noise(yOffset),0,1,-1,1));
   }
 
-  updatePosHistory(){
+  updatePosHistory(maxArrayLength = 500) {
     // Limiting the maximum number of elements so that the array doesn't grow indefinitely
     // Array.shift() removes the 1st element, which is the oldest position visited by the walker
     this.posHistory.push(this.pos.copy());
-    if (this.posHistory.length > 500) {      // The max limit can be modified - could be added as a parameter
+    if (this.posHistory.length > maxArrayLength) {      // The max limit can be modified - could be added as a parameter
         this.posHistory.shift();
     }
   }
@@ -130,5 +130,5 @@ function setup() {
 function draw() {
   background(255);
   noiseWalker.display();
-  noiseWalker.step(/*noisyStepSize*/ true, /*vel_mag*/ 3, /*relativeMaxStepSize*/ 0.25);
+  noiseWalker.step(/*noisyStepSize*/ false, /*vel_mag*/ 3, /*relativeMaxStepSize*/ 0.25);
 }

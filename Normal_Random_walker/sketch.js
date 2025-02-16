@@ -40,9 +40,9 @@ class WalkerNormal {
   }
   
   step(vel_mag=3,chk_edges=false) {
-    this.updatePosHistory();
+    this.updatePosHistory(1000);
 
-    this.setAngle();
+    this.setAngle(/*σ*/ PI/8, /*μ*/ this.vel.heading(), /*changeRate*/ 1, /*changeColor*/ false);
     this.vel.setHeading(this.directionAngle);        // v.setHeading(direction) is same as v = v.mag() * (cos(directionAngle), sin(directionAngle))                                       
     this.vel.setMag(vel_mag);
     this.pos.add(this.vel);
@@ -50,7 +50,7 @@ class WalkerNormal {
 		if (chk_edges){this.checkEdges();}
   }
   
-  setAngle(sigma = PI/8, mu = this.vel.heading(), changeRate = 1, changeColor = true){ 
+  setAngle(sigma = PI/8, mu = this.vel.heading(), changeRate = 1, changeColor = false){ 
     // Function to set the direction angle of the walker's velocity
     // changeRate - rate at which we change the angle in terms of frames
     // changeColor - Whether walker's color changes when the direction changes significantly (>2 SDs)
@@ -64,15 +64,15 @@ class WalkerNormal {
 			//this.drectionAngle = randomGaussian(mu, sigma);		
       
       // Changing color if change in direction is more than 2 SDs
-      if (abs(this.directionAngle - mu) >= 2*sigma && (changeColor)) {
+      if ((changeColor) && abs(this.directionAngle - mu) >= 2*sigma) {
       this.col = color(random(255), random(255), random(255));        // color is set by choosing random RGB values
       }
     }
   }
 
-  updatePosHistory(){
+  updatePosHistory(maxArrayLength = 500){
     this.posHistory.push(this.pos.copy());
-    if (this.posHistory.length > 500) { 
+    if (this.posHistory.length > maxArrayLength) { 
         this.posHistory.shift();
     }
   }
@@ -95,21 +95,21 @@ class WalkerNormal {
 function windowResized(){
   //Function to resize canvas when window is resized - in other words, resize our sketch when windown is resized
   resizeCanvas(windowWidth,windowHeight);
-  background(200);
+  background(255);
 }
 
 let normalWalker;
 
 function setup() {
   createCanvas(windowWidth,windowHeight);
-  background(200);
+  background(255);
 	
 	//Initialising in the centre of the screen with size 20 is standard. Can be played around with.
   normalWalker = new WalkerNormal(width / 2, height / 2, 10);
 }
 
 function draw() {
-  background(200);
+  background(255);
   normalWalker.display();
   normalWalker.step(/*vel_mag*/ 3,/*chk_edges*/ true);     // vel_mag = 3 is just an arbitrary standard picked after experimentation
 }
