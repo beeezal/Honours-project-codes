@@ -70,9 +70,8 @@ class PerlinWalker {
         vel_mag = noise(this.magOffset)*(this.r*relativeMaxStepSize);
         this.magOffset += 0.01;
     }   
-
-    //Manupilate the velocity of the walker using Perlin noise
     PerlinWalker.noisyVelocity(this.xOffset, this.yOffset, this.vel);
+    
     //Explore difference between 
     // this.vel.mult(vel_mag); 
     this.vel.setMag(vel_mag);

@@ -25,10 +25,14 @@ class Wanderer extends Seeker{
   //Pseudo-target - target is generated within the class - make this private
   #target = p5.Vector.fromAngle(this.targetAngle); 
 
-  calculateWanderTarget(){              //To calculate the predicted location and target
+  calculateWanderTarget(){              
+    //To calculate the predicted location and target
     this.predictedPos.set(p5.Vector.setMag(this.vel, this.predictionInterval));
     this.predictedPos.add(this.pos);
 
+    //We want to change the angle θ by an amount that will not be too small that the direction very rarely changes
+    // and not too large that the direction changes too frequently. Therefore after guess and experimentation
+    // We landed at (1/20)*circumference which is 18° = (PI/10)' ≈ 0.3'
     this.targetAngle += random(-0.3,0.3);
     this.#target.set(p5.Vector.fromAngle(this.targetAngle + this.vel.heading(),this.wanderRadius));
     this.#target.add(this.predictedPos);
