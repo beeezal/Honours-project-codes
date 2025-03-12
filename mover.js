@@ -10,9 +10,10 @@ class AutonMover {
 
         this.maxSpeed = 5;
         this.maxForce = 0.125;
+        this.lifespan = 600;
 
         this.posHistory = [];
-        this.showHistory = true;
+        this.showHistory = false;
     }
 
     applyForce(force) {
@@ -64,6 +65,10 @@ class AutonMover {
         } else if (this.pos.y < -this.r) {
             this.pos.y = height + (this.pos.y + this.r);
         }
+    }
+
+    isDead(){
+        return (this.lifespan <= 0);
     }
 }
 
