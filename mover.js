@@ -11,6 +11,7 @@ class AutonMover {
         this.maxSpeed = 5;
         this.maxForce = 0.125;
         this.lifespan = 600;
+        this.desiredSeparation = 30;
 
         this.posHistory = [];
         this.showHistory = false;
@@ -51,6 +52,23 @@ class AutonMover {
         steer.limit(this.maxForce);         
 
         this.applyForce(steer);
+    }
+
+    separate(agentArray){
+        let count = 0;
+        let holderVector = this.desired_vel
+
+        for (let otherAgent of agentArray){
+            let diffVector = p5.Vector.sub(this.pos, otherAgent.pos);
+            if (otherAgent !== this && diffVector.mag() <= this.desiredSeparation){
+                diffVector.setMag(this.maxSpeed+20);
+                this.desired_vel.add(diffVector);
+                count++;
+            }
+       }
+       this.desired_vel.div(count);
+       this.steer();
+       this.desired_vel = holderVector;
     }
 
     checkEdges() {

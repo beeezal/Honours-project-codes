@@ -13,6 +13,7 @@ class Seekers {
   run(target){
     for (let i = this.seekers.length - 1; i >= 0; i--){
       this.seekers[i].display();
+      this.seekers[i].separate(this.seekers);
       this.seekers[i].update(target);
       this.seekers[i].checkEdges();
 
