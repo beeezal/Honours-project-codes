@@ -16,5 +16,6 @@ function draw() {
   mv.display(/*dinstingDirection*/ true);
 
   mouse.set(mouseX, mouseY);
-  mv.update(/*target*/ mouse, /*arriving_bhv*/ true, /*chk_edges*/ true);
+  mv.applyBehaviours(/*seekWeight*/ 1,/*sepWeight*/ 0, /*target*/ mouse, /*arrive*/ false /*entityArray*/);
+  mv.update(/*chk_edges*/ true);
 }

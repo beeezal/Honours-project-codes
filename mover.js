@@ -11,7 +11,7 @@ class AutonMover {
         this.maxSpeed = 5;
         this.maxForce = 0.125;
         this.lifespan = 600;
-        this.desiredSeparation = 30;
+        this.desiredSeparation = this.D;
 
         this.posHistory = [];
         this.showHistory = false;
@@ -47,28 +47,30 @@ class AutonMover {
         }
     }
 
-    steer(){
+    steer(){ //think of changing this to function expression
         let steer = p5.Vector.sub(this.desired_vel, this.vel);
         steer.limit(this.maxForce);         
 
-        this.applyForce(steer);
+        return steer;
     }
 
-    separate(agentArray){
+    separate(entityArray){
         let count = 0;
-        let holderVector = this.desired_vel
+        this.desired_vel.set();
 
-        for (let otherAgent of agentArray){
+        for (let otherAgent of entityArray){
             let diffVector = p5.Vector.sub(this.pos, otherAgent.pos);
-            if (otherAgent !== this && diffVector.mag() <= this.desiredSeparation){
-                diffVector.setMag(this.maxSpeed+20);
+            if (otherAgent !== this && (diffVector.mag() < this.desiredSeparation)){
+                diffVector.setMag(1/diffVector.mag());
                 this.desired_vel.add(diffVector);
                 count++;
             }
        }
-       this.desired_vel.div(count);
-       this.steer();
-       this.desired_vel = holderVector;
+       if (count > 0){
+            this.desired_vel.setMag(this.maxSpeed);
+            return this.steer();
+        }
+        return createVector(0,0);
     }
 
     checkEdges() {
@@ -93,10 +95,10 @@ class AutonMover {
 class Seeker extends AutonMover{
     seek(target, arrive = false){
         // Calculate the desired velocity
-        this.desired_vel = p5.Vector.sub(target, this.pos);
+        this.desired_vel = p5.Vector.sub(target, this.pos);    // Same as desired.vel.set(p5.Vector.sub(target, this.pos))
         let distance = this.desired_vel.mag();
-        
-        //CHECK IF THIS WORKS
+
+
         if (arrive && distance < 100){
                 let desiredMag = map(distance, 0, 100, 0, this.maxSpeed);
                 this.desired_vel.setMag(desiredMag);
@@ -104,13 +106,20 @@ class Seeker extends AutonMover{
         }
         else{this.desired_vel.setMag(this.maxSpeed)};
 
-        this.steer();
+        return this.steer();
     }
 
-    update(target, arrive = false, chk_edges = false) {
+    applyBehaviours(seekWeight = 0.5, sepWeight = 0.5, target = createVector(width/2,height/2), arrive = false, entityArray = []){
+        let seekForce = p5.Vector.mult(this.seek(target, arrive), seekWeight);
+        let separationForce = p5.Vector.mult(this.separate(entityArray), sepWeight);
+        
+        this.applyForce(seekForce);
+        this.applyForce(separationForce);
+    }
+
+    update(chk_edges = false) {
         this.updateHistory();
 
-        this.seek(target, arrive);
         this.vel.add(this.acc);
         this.pos.add(this.vel);
         this.acc.mult(0);

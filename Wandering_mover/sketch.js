@@ -59,6 +59,12 @@ class Wanderer extends Seeker{
   get target(){
     return this.#target;
   }
+
+  update(arrive = false, chk_edges = false){
+
+    this.applyBehaviours(1, 0, this.#target, arrive);
+    super.update(chk_edges);
+  }
 }
 
 function setup() {
@@ -74,7 +80,7 @@ function draw() {
   wanderer.wanderRadius = randomRadius ? constrain(wanderer.wanderRadius+=random(-2,2), 5, wanderer.predictionInterval-wanderer.r) 
                                       : wanderer.wanderRadius;
   wanderer.calculateWanderTarget();
-  wanderer.update(/*target*/ wanderer.target,/*arrive*/ false,/*chk_edges*/ true);
+  wanderer.update(/*arrive*/ false,/*chk_edges*/ true);
 }
 
 function keyPressed(){

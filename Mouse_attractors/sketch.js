@@ -13,9 +13,12 @@ class Seekers {
   run(target){
     for (let i = this.seekers.length - 1; i >= 0; i--){
       this.seekers[i].display();
-      this.seekers[i].separate(this.seekers);
-      this.seekers[i].update(target);
-      this.seekers[i].checkEdges();
+
+      this.seekers[i].applyBehaviours(/*seekWeight*/ 0.5, /*sepWeight*/ 0.5, 
+                                      /*target*/ target, /*arrive*/ false, 
+                                      /*entityArray*/ this.seekers);
+
+      this.seekers[i].update(/*chk_edges*/ true);
 
       if (this.seekers[i].isDead()){
         this.seekers.splice(i, 1);
