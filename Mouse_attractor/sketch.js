@@ -6,7 +6,7 @@ let mouse;
 
 function setup() {
   createCanvas(windowWidth,windowHeight);
-  mv = new Seeker(width/2,height/2,20);
+  mv = new Evader(width/2,height/2,20);
   mouse = createVector(mouseX, mouseY);
 }
 
@@ -16,6 +16,6 @@ function draw() {
   mv.display(/*dinstingDirection*/ true);
 
   mouse.set(mouseX, mouseY);
-  mv.applyBehaviours(/*seekWeight*/ 1,/*sepWeight*/ 0, /*target*/ mouse, /*arrive*/ false /*entityArray*/);
+  mv.applyBehaviours(/*evadeWeight*/ 1,/*sepWeight*/ 0, /*target*/ mouse, /*safeAware*/ true /*entityArray*/);
   mv.update(/*chk_edges*/ true);
 }

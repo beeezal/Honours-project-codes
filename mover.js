@@ -47,7 +47,7 @@ class AutonMover {
         }
     }
 
-    steer(){ //think of changing this to function expression
+    steer(){ 
         let steer = p5.Vector.sub(this.desired_vel, this.vel);
         steer.limit(this.maxForce);         
 
@@ -143,3 +143,69 @@ class Seeker extends AutonMover{
         super.display(dinstingDirection, mouthSize);
     }
 }
+
+class Evader extends AutonMover {
+    evade(target, safeAware = false){ 
+        this.desired_vel = p5.Vector.sub(this.pos, target);
+        let distance = this.desired_vel.mag();
+        
+        if (safeAware){
+            if (distance < 150) {
+                let desiredMag = map(distance, 150, 0, this.maxSpeed, this.maxSpeed*2);
+                this.desired_vel.setMag(desiredMag);
+
+                return this.steer();
+            }
+
+            if (distance > 500) {
+                let desiredMag = map(distance, 600, 500, this.maxSpeed * 0.2, this.maxSpeed, true);
+                this.desired_vel.setMag(desiredMag);   
+                
+                return this.steer();
+            }
+        }
+        this.desired_vel.setMag(this.maxSpeed);
+        return this.steer();
+    }
+
+    applyBehaviours(evadeWeight = 0.5, sepWeight = 0.5, target = createVector(width/2,height/2), safeAware = false, entityArray = []){
+        let evadeForce = p5.Vector.mult(this.evade(target, safeAware), evadeWeight);
+        let separationForce = p5.Vector.mult(this.separate(entityArray), sepWeight);
+        
+        this.applyForce(evadeForce);
+        this.applyForce(separationForce);
+
+    }
+
+    update(chk_edges = false){
+        this.updateHistory();
+
+        this.vel.add(this.acc);
+        this.pos.add(this.vel);
+        this.acc.mult(0);
+
+        if (chk_edges) { this.checkEdges(); }
+    }
+
+    display(dinstingDirection = false, mouthSize = PI / 10) {
+        if (this.showHistory) {
+            for (let i = 0; i < this.posHistory.length-1; i++) {
+                let prevPos = this.posHistory[i];
+                let currPos = this.posHistory[i + 1];
+
+                let posChange = p5.Vector.dist(prevPos, currPos);
+                if (posChange >= windowWidth || posChange >= windowHeight) {
+                    continue;
+                }
+                line(prevPos.x, prevPos.y, currPos.x, currPos.y);
+            }
+        }
+        super.display(dinstingDirection, mouthSize);
+    }
+}
+
+/*
+Problems with direct implementation of Evader:
+- evader runs away too much - because we are bounded by the canvas - keeps turning around the edges - might be desirable depending on the case
+- eg. if the cavas is huge or velocities are low 
+*/
