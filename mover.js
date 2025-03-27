@@ -1,3 +1,6 @@
+// Please check if all examples still work as expected after refactor of update() function from 
+// Induvidual child classes to the parent class AutonMover
+
 class AutonMover {
     constructor(x, y, r) {
         this.r = r;
@@ -12,6 +15,7 @@ class AutonMover {
         this.maxForce = 0.125;
         this.lifespan = 600;
         this.desiredSeparation = this.D;
+        this.neighbourDistance = this.D * 3;
 
         this.posHistory = [];
         this.showHistory = false;
@@ -73,6 +77,55 @@ class AutonMover {
         return createVector(0,0);
     }
 
+    cohere(entityArray){
+        let count = 0;
+        let avgPos = createVector(0,0);
+
+        for (let otherAgent of entityArray){
+            if (otherAgent !== this && p5.Vector.dist(this.pos, otherAgent.pos) < this.neighbourDistance){
+                avgPos.add(otherAgent.pos);
+                count++;
+            }
+        }
+
+        if (count > 0){
+            sum.div(count);
+            this.desired_vel = p5.Vector.sub(sum, this.pos);
+            return this.steer();
+        }
+
+        return createVector(0,0);
+    }
+
+    align(entityArray){
+        let count = 0;
+        this.desired_vel.set();
+
+        for (let otherAgent of entityArray){
+            if (otherAgent !== this && p5.Vector.dist(this.pos, otherAgent.pos) < this.neighbourDistance){
+                this.desired_vel.add(otherAgent.vel);
+                count++;
+            }
+        }
+
+        if (count > 0){
+            this.desired_vel.div(count);
+            return this.steer();
+        }
+
+        return createVector(0,0);
+    }
+
+    update(chk_edges = false){
+        this.updateHistory();
+
+        this.vel.add(this.acc);
+        this.pos.add(this.vel);
+        this.acc.mult(0);
+
+        if (chk_edges) { this.checkEdges(); }
+    }
+
     checkEdges() {
         //Checking if the walker has crossed the canvas edges, if so - wrap around
         if (this.pos.x > width + this.r) {
@@ -115,16 +168,6 @@ class Seeker extends AutonMover{
         
         this.applyForce(seekForce);
         this.applyForce(separationForce);
-    }
-
-    update(chk_edges = false) {
-        this.updateHistory();
-
-        this.vel.add(this.acc);
-        this.pos.add(this.vel);
-        this.acc.mult(0);
-
-        if (chk_edges) { this.checkEdges(); }
     }
 
     display(dinstingDirection = false, mouthSize = PI / 10) {
@@ -177,16 +220,6 @@ class Evader extends AutonMover {
 
     }
 
-    update(chk_edges = false){
-        this.updateHistory();
-
-        this.vel.add(this.acc);
-        this.pos.add(this.vel);
-        this.acc.mult(0);
-
-        if (chk_edges) { this.checkEdges(); }
-    }
-
     display(dinstingDirection = false, mouthSize = PI / 10) {
         if (this.showHistory) {
             for (let i = 0; i < this.posHistory.length-1; i++) {
@@ -203,9 +236,3 @@ class Evader extends AutonMover {
         super.display(dinstingDirection, mouthSize);
     }
 }
-
-/*
-Problems with direct implementation of Evader:
-- evader runs away too much - because we are bounded by the canvas - keeps turning around the edges - might be desirable depending on the case
-- eg. if the cavas is huge or velocities are low 
-*/
