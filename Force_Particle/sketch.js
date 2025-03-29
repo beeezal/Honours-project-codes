@@ -37,8 +37,8 @@ class Mover {
   }
 
   applyForce(force) {
-    // Since gravitational acceleration is constant, we have to create a copy
-    // And apply second law to the copied vector
+    // Since we may not want to directly affect the vector that is passed to us 
+    // we have to create a copy apply second law to the copied vector
     let f = p5.Vector.div(force, this.mass);
     this.acc.add(f);
   }
