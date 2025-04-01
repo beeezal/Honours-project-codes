@@ -32,14 +32,13 @@ class AutonMover {
             //To visualise the direction of motion
             push();
             fill(100);
-            translate(this.pos.x, this.pos.y);
-            rotate(this.vel.heading());
+            translate(this.pos.x, this.pos.y);    // Changes the origin to the current position of agent
+            rotate(this.vel.heading());           // Rotate the coordinate plane s.t., positive x-axis is along vel.heading
             let lowerLip = mouthSize / 2 * sin(frameCount * 0.1) + mouthSize / 2;
             arc(0, 0, this.D, this.D, lowerLip, TWO_PI - lowerLip, PIE);
-            pop();  //Return to orgianl saved state 
+            pop();  //Return to orgianl saved state - includes origin and rotation
         }
         else {
-            //Draws a circle at the current location (x,y) with radius r = D/2
             fill(100);
             circle(this.pos.x, this.pos.y, this.D);
         }
@@ -69,11 +68,9 @@ class AutonMover {
 
 class Seeker extends AutonMover{
     seek(target, arrive = false){
-        // Calculate the desired velocity
         this.desired_vel = p5.Vector.sub(target, this.pos);
         let distance = this.desired_vel.mag();
         
-        //CHECK IF THIS WORKS
         if (arrive && distance < 100){
                 let desiredMag = map(distance, 0, 100, 0, this.maxSpeed);
                 this.desired_vel.setMag(desiredMag);
