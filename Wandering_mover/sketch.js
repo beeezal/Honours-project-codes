@@ -7,43 +7,33 @@ class Wanderer extends Seeker{
     super(x,y,r);
 
     this.wanderRadius = 40;
-    this.predictionInterval = 100;
+    this.predictionInterval = 100;    // How far ahead to draw the circle
 
-    this.predictedPos = createVector(0,0); 
-    this.targetAngle=radians(random(0,360));
+    this.predictedPos = createVector(0,0);    // Vector from current position to predicted position
+
+    // Since we are making random changes to the target position along a circle, 
+    // we use the angle (b/w the target from the center and current direction) - and make small changes to it
+    // i.e., we work with polar coordinates
+    this.targetAngle=radians(random(0,360));    // Initialize to some random angle - same as random(0, TWO_PI)
     this.displayWanderCircle = true;
   }
 
-  //Pseudo-target - target is generated within the class - make this private
+  // Pseudo-target - target is generated within the class 
+  // To disallow access outside the class, made it private - #
   #target = p5.Vector.fromAngle(this.targetAngle); 
 
-  //Pseudocode for the class.
-  /* 
-  1. Inherent all the functions from parent class Mover  - maybe learn how to in different ways.
-  2.  Includes update(), display(), applyForce(), chkEdges() and seek()
-  3. Modify update() or create new function that provides the wandering behaviour
-  4. a) Ask user for radius of the circle centered at predicted location and change in angle 
-     b) Calculate the center of the circle by adding the current velocity vector to the position vector
-     c) Initialize a random vector (for direction from the center) and change it every frame by given angle.
-
-  5. Now finally seek the point on the circle. 
-  6. Remaining follow the same procedure as in general Automonous Agent.
-  */
-
-  calculateWanderTarget(){              //To calculate the predicted location and target
+  calculateWanderTarget(){              
     this.predictedPos.set(p5.Vector.setMag(this.vel, this.predictionInterval));
     this.predictedPos.add(this.pos);
 
     this.targetAngle += random(-0.3,0.3);
-    this.#target.set(p5.Vector.fromAngle(this.targetAngle + this.vel.heading(),this.wanderRadius));
+    this.#target.set(p5.Vector.fromAngle(this.targetAngle + this.vel.heading(),this.wanderRadius)); // target = (θ, r)
     this.#target.add(this.predictedPos);
   }
 
   displayCircle(){
     noFill();
-    //drawingContext.setLineDash([5,5]);
     line(this.pos.x,this.pos.y,this.predictedPos.x,this.predictedPos.y);
-    //drawingContext.setLineDash([]);
     circle(this.predictedPos.x,this.predictedPos.y, this.wanderRadius*2);
     line(this.predictedPos.x,this.predictedPos.y,this.#target.x,this.#target.y);
     circle(this.#target.x,this.#target.y,5);
