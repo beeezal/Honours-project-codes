@@ -1,40 +1,39 @@
-let w;
-
 class WalkerNormal {
   constructor(x, y, r) {
-    //Instance made with parameters position (x,y) and radius - r
-    this.location = createVector(x, y);         //createVector() instantiates a vector object
+    this.location = createVector(x, y);
     this.velocity = p5.Vector.random2D();  
-    this.r = r;                                 //r - diameter of the walker
-    this.sa = this.velocity.heading();          //sa - step angle (intialised to direction of velocity)
-		this.col = color(100)												//col - initialised with the grayscale value 100
+    this.r = r;    
+    this.D = this.r * 2;                       
+    this.velAngle = this.velocity.heading();
+		this.col = color(100)												// initialised with the grayscale value 100
   }
   
   display() {
 		stroke(0);
     fill(this.col);
-    // Displaying the step of the walker using a relatively thin line
-    strokeWeight(this.r/1.5);
-    line(this.location.x - this.velocity.x, this.location.y - this.velocity.y,this.location.x, this.location.y);
+    // Displaying the step of the walker using a relatively thin line if step size is large
+    // strokeWeight(this.r/3);
+    // line(this.location.x - this.velocity.x, this.location.y - this.velocity.y,this.location.x, this.location.y);
     //Displaying the walker as a circle of radius r
     strokeWeight(1);
-    circle(this.location.x, this.location.y, this.r);
+    circle(this.location.x, this.location.y, this.D);
   }
   
   update(vel_mag=1,chk_edges=false) {
     if (frameCount % 3 === 0) {
-			/*randomGaussian() returns a random sample from a N(0,1) 
-			Therefore by performing scaling and translation of the distribution we have 
-			the step_angle distributed according to N(current direction,π/8)*/
+			// randomGaussian() returns a random sample from a N(0,1) 
+			// Therefore by performing scaling and translation of the distribution we have 
+			// the stepAangle is hence distributed according to N(current direction,π/8)
 			
-      this.sa = randomGaussian() * PI / 8 + this.velocity.heading();
-			//σ and μ were picked experimentally
+      this.velAngle = randomGaussian() * PI / 8 + this.velocity.heading();
 			
-      if (abs(this.sa - this.velocity.heading()) >= QUARTER_PI) {       //  Changing color if change in direction is more than 2 S.Ds (π/4 = 2σ) 
-        this.col = color(random(255), random(255), random(255));				// color is set by choosing random RGB values
+      // Changing color if change in direction is more than 2 S.Ds (π/4 = 2σ)
+      // color is set by choosing random RGB values
+      if (abs(this.velAngle - this.velocity.heading()) >= QUARTER_PI) {        
+        this.col = color(random(255), random(255), random(255));				
       }
     }
-    this.velocity = createVector(cos(this.sa), sin(this.sa));
+    this.velocity = createVector(cos(this.velAngle), sin(this.velAngle));
     this.velocity.mult(vel_mag);
     this.location.add(this.velocity);
 		if (chk_edges){
@@ -63,15 +62,16 @@ function windowResized(){
   background(200);
 }
 
+let w;
+
 function setup() {
   createCanvas(windowWidth,windowHeight);
 	
-	//Initialising in the centre of the screen with size 20 is standard. Can be played around with.
-  w = new WalkerNormal(width / 2, height / 2, 20);
+  w = new WalkerNormal(width / 2, height / 2, 10);
   background(200);
 }
 
 function draw() {
   w.display();
-  w.update(3,true);     // vel_mag = 3 is just an arbitrary standard picked after experimentation
+  w.update(/*vel_mag*/ 3,/*chk_edgs*/ true); 
 }
