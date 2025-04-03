@@ -26,7 +26,7 @@ class Wanderer extends Seeker{
     this.predictedPos.set(p5.Vector.setMag(this.vel, this.predictionInterval));
     this.predictedPos.add(this.pos);
 
-    this.targetAngle += random(-0.3,0.3);
+    this.targetAngle += random(-0.3,0.3);    // here the change is in radians
     this.#target.set(p5.Vector.fromAngle(this.targetAngle + this.vel.heading(),this.wanderRadius)); // target = (θ, r)
     this.#target.add(this.predictedPos);
   }
@@ -67,6 +67,7 @@ function draw() {
   wanderer.update(/*target*/ wanderer.target,/*arrive*/ false,/*chk_edges*/ true);
 }
 
+// Providing functionality to toggle - displaying the wanderCircle, changing radius randomly
 function keyPressed(){
   if (keyCode === 32){
     wanderer.displayWanderCircle = !wanderer.displayWanderCircle;

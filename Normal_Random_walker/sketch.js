@@ -21,7 +21,7 @@ class WalkerNormal {
     circle(this.location.x, this.location.y, this.r);
   }
   
-  move(vel_mag=1,chk_edges=false) {
+  update(vel_mag=1,chk_edges=false) {
     if (frameCount % 3 === 0) {
 			/*randomGaussian() returns a random sample from a N(0,1) 
 			Therefore by performing scaling and translation of the distribution we have 
@@ -73,5 +73,5 @@ function setup() {
 
 function draw() {
   w.display();
-  w.move(3,true);     // vel_mag = 3 is just an arbitrary standard picked after experimentation
+  w.update(3,true);     // vel_mag = 3 is just an arbitrary standard picked after experimentation
 }

@@ -9,13 +9,13 @@ class Walker {
     this.y = height / 2;
   }
 
-  show() {
+  display() {
     //Displays the walker at the given location
     stroke(0);
     point(this.x, this.y);
   }
 
-  step() {
+  update() {
     //Changes the location of the walker randomly within a unit square of the current location
     this.x += random(-1, 1);
     this.y += random(-1, 1);
@@ -37,6 +37,6 @@ function setup() {
 /*The draw() function is called repeatedly in a infinte loop. It is used to animate the objects in the canvas,
 by repeatedly changing the properties of the object every frame*/
 function draw() { 
-  w.show();
-  w.step();
+  w.display();
+  w.update();
 }
