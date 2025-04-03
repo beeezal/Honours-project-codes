@@ -1,40 +1,27 @@
-/*Creating a RW - Random Walker class with vectors.
-p5 implements vectors throught the p5.Vector class*/
-
-class Walker{
-   /* t - time, in units of frameCount. Used as input of noise(). 100 was chosen arbitrarily as starting point in time
-   t is a Class field - not accesible by instances*/
-
-  //t = 100; 
-  //Uncomment above if RW is controlled by noise                                      
+class Walker{                                    
   constructor(x, y, r) {
-    //Instance made with parameters position (x,y) and radius - r
-    this.location = createVector(x, y);         //createVector() instantiates a vector object
+    this.location = createVector(x, y);
     this.velocity = p5.Vector.random2D();  
-    this.r = r;                                 //r - diameter of the walker
-    this.sa = random(0,TWO_PI);                 //sa - step angle
+    this.r = r; 
+    this.D = r * 2 
+    this.sa = random(0,TWO_PI);    // sa = velAngle
   }
   
   display() {
     stroke(0);
     fill(100);
     // Displaying the step of the walker using a relatively thin line
-    strokeWeight(this.r/1.5);
+    strokeWeight(this.r/3);
     line(this.location.x - this.velocity.x, this.location.y - this.velocity.y,this.location.x, this.location.y);
     //Displaying the walker as a circle of radius r
     strokeWeight(1);
-    circle(this.location.x, this.location.y, this.r);
+    circle(this.location.x, this.location.y, this.D);
   }
 	
   
-  move(vel_mag=1,chk_edges=false) {
-    /* Idea used is new location = old location + velocity vector
-    Velocity vectors changes every 3 frame randomly changing the params step size (vel_mag) and/or direction (sa) 
-    3 frames picked as a standard accross all walker methods*/
+  update(vel_mag=1,chk_edges=false) {
     if (frameCount%3==0){
       this.sa = random(0,TWO_PI);
-      //Uncomment below if RW is controlled by noise
-      //this.sa = noise(this.t)*TWO_PI;
     }
     this.velocity.set(cos(this.sa), sin(this.sa));
     this.velocity.mult(vel_mag);
@@ -42,12 +29,9 @@ class Walker{
 		if (chk_edges){
 			this.checkEdges();
 		}
-    //Uncomment below if RW is controlled by noise
-    //this.t += 0.01;
   }
 	
   checkEdges() {
-    //Function to check if the walker has crossed the canvas edges, if so - wrap around
     if (this.location.x > width+this.r) {
       this.location.x = this.location.x - (width + this.r);
     } else if (this.location.x < -this.r) {
@@ -62,15 +46,16 @@ class Walker{
 }
 
 function windowResized(){
-  //Function to resize canvas when window is resized - in other words, resize our sketch when windown is resized
   resizeCanvas(windowWidth,windowHeight);
   background(200);
 }
 
-function RandomSquared(){
+function randomSquared(){
   //Function to generate random numbers with a x^2 distribution - using accept reject method
-  let x = random();
-  let y = random();
+  let x = random();    // random number to be accepted
+  let y = random();    // qualifying random number
+
+  // P(y < x^2) is the condition for acceptance
   while (y>x**2){
     x = y;
     y = random();
@@ -84,14 +69,11 @@ function setup() {
     createCanvas(windowWidth,windowHeight);
     background(200);
 
-    //Creating an instance w of Walker and we will default to centre of the screen with size 20 as  standard practice
-    w = new Walker(width / 2, height / 2, 20);
+    w = new Walker(width / 2, height / 2, 3);
 }
 
 function draw() {
   w.display();
-  /* Remove below comment slashes, if we need to also vary step size by a custom distribution */
-  //let vel_mag =(frameCount%180==0)?RandomSquared()*50:1;
-  //w.move(vel_mag);
-  w.move(3,true);       // vel_mag = 3 is just an arbitrary standard picked after experimentation
+  let vel_mag =(frameCount%180==0)?randomSquared()*50:3;
+  w.move(vel_mag, true);
 }
