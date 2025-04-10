@@ -14,7 +14,7 @@ class AutonMover {
         this.maxSpeed = 5;
         this.maxForce = 0.125;
         this.lifespan = 600;
-        this.desiredSeparation = this.D;
+        this.desiredSeparation = this.D*1.25;
         this.neighbourDistance = this.D * 3;
 
         this.posHistory = [];
@@ -89,8 +89,8 @@ class AutonMover {
         }
 
         if (count > 0){
-            sum.div(count);
-            this.desired_vel = p5.Vector.sub(sum, this.pos);
+            avgPos.div(count);
+            this.desired_vel = p5.Vector.sub(avgPos, this.pos);
             return this.steer();
         }
 
